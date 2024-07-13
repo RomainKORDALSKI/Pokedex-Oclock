@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>o'Pokedex</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/animate.css@4.0.0/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma-toast@2.4.0/dist/bulma-toast.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bulma-toast@2.4.0/dist/bulma-toast.min.js"></script>
+    <script defer src="./assets/js/app.js" type="module"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="buttons are-small is-centered is-hidden-desktop">
+        <button
+          id="toggleTeamsButtonMobile"
+          class="button is-primary toggle-teams-button-mobile rotate-90"
+        >
+          <span>Teams</span>
+        </button>
+      </div>
+    </header>
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-3 sidebar is-hidden-mobile">
+            <h2 class="title is-4 has-text-centered mb-5">TEAMS</h2>
+            <div class="columns is-centered">
+              <div class="column has-text-centered">
+                <button class="button is-primary mb-4" id="add-team">
+                  Ajouter une team
+                </button>
+              </div>
+            </div>
+            <div id="teams" class="teams"></div>
+          </div>
+          <div class="column">
+            <h2 class="title is-4 has-text-centered mb-5 title151">
+              Liste des 151 Pokémons
+            </h2>
+            <input
+              type="text"
+              id="searchBar"
+              class="input"
+              placeholder="Rechercher des Pokémon..."
+            />
+            <div id="typeFilter">
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/acier.png"
+                class="type-icon"
+                data-type="Acier"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/combat.png"
+                class="type-icon"
+                data-type="Combat"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/dragon.png"
+                class="type-icon"
+                data-type="Dragon"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/eau.png"
+                class="type-icon"
+                data-type="Eau"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/electrik.png"
+                class="type-icon"
+                data-type="Electrik"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/feu.png"
+                class="type-icon"
+                data-type="Feu"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/glace.png"
+                class="type-icon"
+                data-type="Glace"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/insecte.png"
+                class="type-icon"
+                data-type="Insecte"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/normal.png"
+                class="type-icon"
+                data-type="Normal"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/plante.png"
+                class="type-icon"
+                data-type="Plante"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/poison.png"
+                class="type-icon"
+                data-type="Poison"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/psy.png"
+                class="type-icon"
+                data-type="Psy"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/roche.png"
+                class="type-icon"
+                data-type="Roche"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/sol.png"
+                class="type-icon"
+                data-type="Sol"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/spectre.png"
+                class="type-icon"
+                data-type="Spectre"
+              />
+              <img
+                src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/types/feu.png"
+                class="type-icon"
+                data-type="Vol"
+              />
+            </div>
+            <button id="openVotesModalButton" class="button is-primary">
+              Voir les votes
+            </button>
+            <div id="comparisonPanel" class="comparison-panel">
+              <h3>Comparer deux Pokémon</h3>
+              <div class="selected-pokemon-container"></div>
+              <button class="button is-success" id="compareButton">
+                Comparer
+              </button>
+            </div>
+            <div id="pokemonList" class="pokemon-list"></div>
+            <div id="paginationContainer" class="pagination-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Templates -->
+    <template id="pokemon-card-template">
+      <div class="pokemon-card box">
+        <div class="pokemon-header mt-4">
+          <p class="pokemon-number"></p>
+          <p class="pokemon-name"></p>
+          <div class="pokemon-types"></div>
+
+          <img class="pokemon-image" src="" alt="Pokemon Image" />
+        </div>
+
+        <div class="pokemon-card-footer">
+          <i class="fas fa-heart vote-button"></i>
+          <button class="button is-small is-info add-to-team-button">
+            Ajouter à l'equipe
+          </button>
+          <button class="button is-small is-info compare-button mb-4">
+            Comparer
+            <i class="fa-solid fa-scale-unbalanced"></i>
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Templates teams -->
+    <template id="team-template">
+      <div class="team-card box">
+        <p class="team-name"></p>
+        <div class="team-pokemon-list"></div>
+      </div>
+    </template>
+
+    <!-- error modal -->
+    <div class="modal" id="error-modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <div class="modal-card-head">
+          <p class="modal-card-title">Erreur</p>
+          <button
+            class="delete close"
+            type="button"
+            aria-label="close"
+          ></button>
+        </div>
+
+        <div class="modal-card-body">
+          <p id="error-message">Message d'erreur</p>
+        </div>
+
+        <div class="modal-card-foot">
+          <button class="button close" type="button">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <!-- Modals detail pokemon -->
+  <div id="pokemonDetailModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="pokemonTitleCards">Pokemon Detail</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <img class="pokemon-image" id="pokemonImg" src="" alt="Pokemon Image" />
+        <p id="pokemonId"></p>
+        <p id="pokemonName"></p>
+        <p id="pokemonTypes"></p>
+        <img id="typeImg" class="type-icon" src="" alt="" />
+        <img id="typeImg2" class="type-icon" src="" alt="" />
+        <div id="statsContainer">
+          <div class="stat">
+            <label>HP</label>
+            <span id="statHPValue"></span>
+            <progress id="statHP" max="100"></progress>
+          </div>
+          <div class="stat">
+            <label>Attack</label>
+            <span id="statAttackValue"></span>
+            <progress id="statAttack" max="100"></progress>
+          </div>
+          <div class="stat">
+            <label>Defense</label>
+            <span id="statDefenseValue"></span>
+            <progress id="statDefense" max="100"></progress>
+          </div>
+          <div class="stat">
+            <label>Special Attack</label>
+            <span id="statSpecialAttackValue"></span>
+            <progress id="statSpecialAttack" max="100"></progress>
+          </div>
+          <div class="stat">
+            <label>Special Defense</label>
+            <span id="statSpecialDefenseValue"></span>
+            <progress id="statSpecialDefense" max="100"></progress>
+          </div>
+          <div class="stat">
+            <label>Speed</label>
+            <span id="statSpeedValue"></span>
+            <progress id="statSpeed" max="100"></progress>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button close" type="button">Fermer</button>
+        <button class="button is-success add" id="pokemonLearnMore">
+          Ajouter à l'equipe
+        </button>
+      </footer>
+    </div>
+  </div>
+  <!-- Modals detail teams -->
+
+  <div id="teamDetailModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="teamModalTitle">Détails de l'équipe</p>
+
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <p id="teamName"></p>
+        <p id="teamDescription"></p>
+        <div id="teamPokemonList" class="team-pokemon-list"></div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button close" type="button">Fermer</button>
+        <button class="button is-primary" id="editTeamButton">Modifier</button>
+        <button class="button is-small is-danger" id="deleteTeamButton">
+          Supprimer l'équipe
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- template pokemon  -->
+
+  <template id="pokemonTemplate">
+    <div class="pokemon-item">
+      <span class="pokemon-name"></span>
+      <img
+        class="pokemon-image-team"
+        id="pokemonImg"
+        src=""
+        alt="Pokemon Image"
+      />
+      <button class="button is-small is-danger remove-pokemon-button">
+        <i class="fas fa-trash-alt remove-pokemon-button"></i>
+      </button>
+    </div>
+  </template>
+
+  <!-- Modals add pokemon team  -->
+  <div id="addToTeamModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Ajouter à l'equipe</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body"></section>
+      <footer class="modal-card-foot">
+        <button class="button is-success add">Ajouter</button>
+        <button class="button close">Annuler</button>
+      </footer>
+    </div>
+  </div>
+  <!-- Modals add team  -->
+  <div id="addTeamModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Ajouter une team</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <form id="addTeamForm">
+          <div class="field">
+            <label class="label">Nom de l'équipe</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                id="teamNameInput"
+                placeholder="Nom de l'équipe"
+                name="name"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Description de l'équipe</label>
+            <div class="control">
+              <textarea
+                class="textarea"
+                id="teamDescription"
+                name="description"
+                placeholder="Description de l'équipe"
+                required
+              ></textarea>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success .save-team-button" id="addTeamButton">
+          Ajouter
+        </button>
+        <button class="button close" id="cancelButton">Annuler</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modals edit team  -->
+
+  <div id="editTeamModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modifier l'équipe</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <form id="editTeamForm">
+          <div class="field">
+            <label class="label">Nom de l'équipe</label>
+            <div class="control">
+              <input
+                id="editTeamName"
+                class="input"
+                type="text"
+                placeholder="Nom de l'équipe"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Description de l'équipe</label>
+            <div class="control">
+              <textarea
+                id="editTeamDescription"
+                class="textarea"
+                placeholder="Description de l'équipe"
+              ></textarea>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success save-team-button">Enregistrer</button>
+        <button class="button cancel-edit-button close">Annuler</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modals delete  -->
+
+  <div id="confirmDeleteModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Confirmer la suppression</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>Êtes-vous sûr de vouloir supprimer cette équipe ?</p>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" id="confirmDelete">Confirmer</button>
+        <button class="button" id="cancelDelete">Annuler</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- comparaison modal -->
+  <div id="comparisonModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Comparer les Pokémon</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="columns">
+          <div class="column pokemon1">
+            <h3 class="pokemon-name"></h3>
+            <img class="pokemon-image" src="" alt="Pokemon Image" />
+            <div class="pokemon-stats"></div>
+          </div>
+          <div class="column pokemon2">
+            <h3 class="pokemon-name"></h3>
+            <img class="pokemon-image" src="" alt="Pokemon Image" />
+            <div class="pokemon-stats"></div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button close">Fermer</button>
+      </footer>
+    </div>
+  </div>
+  <!--Modal votes-->
+
+  <div id="votesModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Votes des Pokémon</p>
+        <button class="delete close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div id="podium" class="podium"></div>
+        <div id="votesList"></div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button close">Fermer</button>
+      </footer>
+    </div>
+  </div>
+</html>
